@@ -15,8 +15,8 @@
         <TextBox Name="userTextBox" Header="Username" />
         <PasswordBox Name="passwordBox" Header="Password" />
         <StackPanel Orientation="Horizontal" Spacing="20">
-            <Button x:Name="myButton" Click="myButton_Click">Test connection</Button>
-            <Button x:Name="getContentButton" Style="{StaticResource AccentButtonStyle}">Get table content</Button>
+            <Button x:Name="testButton" Click="testButton_Click">Test connection</Button>
+            <Button x:Name="getContentButton" Click="getContentButton_Click" Style="{StaticResource AccentButtonStyle}">Get table content</Button>
         </StackPanel>
     </StackPanel>
 </Window>

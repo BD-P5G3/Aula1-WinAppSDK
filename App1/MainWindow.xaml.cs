@@ -105,9 +105,14 @@ namespace App1
             }
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
+        private void testButton_Click(object sender, RoutedEventArgs e)
         {
-            myButton.Content = "Clicked";
+            testButton.Content = "Clicked";
+        }
+
+        private void getContentButton_Click(object sender, RoutedEventArgs e)
+        {
+            getContentButton.Content = "Clicked";
         }
     }
 
