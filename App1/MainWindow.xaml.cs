@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices; // For DllImport
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -114,7 +115,9 @@ namespace App1
 
         private async void TestButton_Click(object sender, RoutedEventArgs e)
         {
-            string sqlmessage = TestDBConnection(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
+            testButton_icon.Visibility = Visibility.Collapsed;
+            testButton_ring.Visibility = Visibility.Visible;
+            string sqlmessage = await TestDBConnection(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
 
             ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = buttonsGrid.XamlRoot;
@@ -129,7 +132,10 @@ namespace App1
 
         private async void GetContentButton_Click(object sender, RoutedEventArgs e)
         {
-            string sqlmessage = GetTableContent(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
+            getContentButton_icon.Visibility = Visibility.Collapsed;
+            getContentButton_ring.Visibility = Visibility.Visible;
+
+            string sqlmessage = await GetTableContent(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
 
             ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = buttonsGrid.XamlRoot;
@@ -143,7 +149,7 @@ namespace App1
         }
 
         // SQL functions
-        private string TestDBConnection(string dbServer, string dbName, string userName, string userPass)
+        private async Task<string> TestDBConnection(string dbServer, string dbName, string userName, string userPass)
         {
             string str = "";
             SqlConnection CN = new SqlConnection("Data Source = " + dbServer + " ;" + "Initial Catalog = " + dbName +
@@ -151,7 +157,7 @@ namespace App1
 
             try
             {
-                CN.Open();
+                await CN.OpenAsync();
                 if (CN.State == ConnectionState.Open)
                 {
                     str = "Successful connection to database " + CN.Database + " on the " + CN.DataSource + " server";
@@ -165,10 +171,13 @@ namespace App1
             if (CN.State == ConnectionState.Open)
                 CN.Close();
 
+            testButton_icon.Visibility = Visibility.Visible;
+            testButton_ring.Visibility = Visibility.Collapsed;
+
             return str;
         }
 
-        private string GetTableContent(string dbServer, string dbName, string userName, string userPass)
+        private async Task<string> GetTableContent(string dbServer, string dbName, string userName, string userPass)
         {
             string str = "";
             SqlConnection CN = new SqlConnection("Data Source = " + dbServer + " ;" + "Initial Catalog = " + dbName +
@@ -176,7 +185,7 @@ namespace App1
 
             try
             {
-                CN.Open();
+                await CN.OpenAsync();
                 if (CN.State == ConnectionState.Open)
                 {
                     int cnt = 1;
@@ -200,6 +209,9 @@ namespace App1
 
             if (CN.State == ConnectionState.Open)
                 CN.Close();
+
+            getContentButton_icon.Visibility = Visibility.Visible;
+            getContentButton_ring.Visibility = Visibility.Collapsed;
 
             return str;
         }
