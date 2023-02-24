@@ -10,13 +10,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+    <!--<Border x:Name="AppTitleBar" Grid.Column="1" VerticalAlignment="Top">
+        <TextBlock x:Name="AppTitle" Text="{StaticResource AppTitleName}" VerticalAlignment="Top" Margin="0,8,0,0" />
+    </Border>-->
+    <StackPanel Padding="40" VerticalAlignment="Center" Spacing="20">
         <TextBox Name="addressTextBox"  Header="SQL Database Address" />
         <TextBox Name="userTextBox" Header="Username" />
         <PasswordBox Name="passwordBox" Header="Password" />
-        <StackPanel Orientation="Horizontal" Spacing="20">
-            <Button x:Name="testButton" Click="testButton_Click">Test connection</Button>
-            <Button x:Name="getContentButton" Click="getContentButton_Click" Style="{StaticResource AccentButtonStyle}">Get table content</Button>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="20">
+            <Button x:Name="getContentButton" Click="getContentButton_Click" Style="{StaticResource AccentButtonStyle}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="7">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE17B;"/>
+                    <TextBlock>Get table content</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="testButton" Click="testButton_Click">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="7">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE73E;"/>
+                    <TextBlock>Test connection</TextBlock>
+                </StackPanel>
+            </Button>
         </StackPanel>
     </StackPanel>
 </Window>

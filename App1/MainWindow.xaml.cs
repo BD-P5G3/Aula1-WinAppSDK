@@ -37,6 +37,10 @@ namespace App1
         public MainWindow()
         {
             this.InitializeComponent();
+            Window window = this;
+            window.ExtendsContentIntoTitleBar = true;  // enable custom titlebar
+            window.SetTitleBar(null);      // set user ui element as titlebar
+            
             TrySetSystemBackdrop();
         }
 
