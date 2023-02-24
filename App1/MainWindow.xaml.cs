@@ -11,10 +11,13 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices; // For DllImport
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using WinRT; // required to support Window.As<ICompositionSupportsSystemBackdrop>()
@@ -109,14 +112,96 @@ namespace App1
             }
         }
 
-        private void TestButton_Click(object sender, RoutedEventArgs e)
+        private async void TestButton_Click(object sender, RoutedEventArgs e)
         {
-            testButton.Content = "Clicked";
+            string sqlmessage = TestDBConnection(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
+            
+            ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = buttonsGrid.XamlRoot;
+            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            dialog.Title = "Connection test";
+            dialog.PrimaryButtonText = "OK";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.Content = sqlmessage;
+
+            var result = await dialog.ShowAsync();
         }
 
-        private void GetContentButton_Click(object sender, RoutedEventArgs e)
+        private async void GetContentButton_Click(object sender, RoutedEventArgs e)
         {
-            getContentButton.Content = "Clicked";
+            string sqlmessage = GetTableContent(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
+
+            ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = buttonsGrid.XamlRoot;
+            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            dialog.Title = "Table content";
+            dialog.PrimaryButtonText = "OK";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.Content = sqlmessage;
+
+            var result = await dialog.ShowAsync();
+        }
+
+        // SQL functions
+        private string TestDBConnection(string dbServer, string dbName, string userName, string userPass)
+        {
+            string str = "";
+            SqlConnection CN = new SqlConnection("Data Source = " + dbServer + " ;" + "Initial Catalog = " + dbName +
+                                                       "; uid = " + userName + ";" + "password = " + userPass);
+
+            try
+            {
+                CN.Open();
+                if (CN.State == ConnectionState.Open)
+                {
+                    str = "Successful connection to database " + CN.Database + " on the " + CN.DataSource + " server";
+                }
+            }
+            catch (Exception ex)
+            {
+                str = "Failed to open connection to database due to the error \r\n" + ex.Message;
+            }
+
+            if (CN.State == ConnectionState.Open)
+                CN.Close();
+
+            return str;
+        }
+
+        private string GetTableContent(string dbServer, string dbName, string userName, string userPass)
+        {
+            string str = "";
+            SqlConnection CN = new SqlConnection("Data Source = " + dbServer + " ;" + "Initial Catalog = " + dbName +
+                                                       "; uid = " + userName + ";" + "password = " + userPass);
+
+            try
+            {
+                CN.Open();
+                if (CN.State == ConnectionState.Open)
+                {
+                    int cnt = 1;
+                    SqlCommand sqlcmd = new SqlCommand("SELECT * FROM Hello", CN);
+                    SqlDataReader reader;
+                    reader = sqlcmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        str += cnt.ToString() + " - " + reader.GetInt32(reader.GetOrdinal("MsgID")) + ", ";
+                        str += reader.GetString(reader.GetOrdinal("MsgSubject"));
+                        str += "\n";
+                        cnt += 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                str = "Failed to open connection to database due to the error \r\n" + ex.Message;
+            }
+
+            if (CN.State == ConnectionState.Open)
+                CN.Close();
+
+            return str;
         }
     }
 
