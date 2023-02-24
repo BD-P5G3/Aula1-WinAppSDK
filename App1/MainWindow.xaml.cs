@@ -115,7 +115,7 @@ namespace App1
         private async void TestButton_Click(object sender, RoutedEventArgs e)
         {
             string sqlmessage = TestDBConnection(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
-            
+
             ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = buttonsGrid.XamlRoot;
             dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
