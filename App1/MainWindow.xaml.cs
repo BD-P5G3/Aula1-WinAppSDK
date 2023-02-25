@@ -129,6 +129,10 @@ namespace App1
 
             string sqlmessage = await TestDBConnection(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
 
+            // Restore icon, since data is already fetched
+            testButton_icon.Visibility = Visibility.Visible;
+            testButton_ring.Visibility = Visibility.Collapsed;
+
             // Create a ContentDialog with the output
             ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = buttonsGrid.XamlRoot;
@@ -148,6 +152,10 @@ namespace App1
             getContentButton_ring.Visibility = Visibility.Visible;
 
             string sqlmessage = await GetTableContent(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
+
+            // Restore icon, since data is already fetched
+            getContentButton_icon.Visibility = Visibility.Visible;
+            getContentButton_ring.Visibility = Visibility.Collapsed;
 
             // Create a ContentDialog with the output
             ContentDialog dialog = new ContentDialog();
@@ -187,9 +195,6 @@ namespace App1
             if (CN.State == ConnectionState.Open)
                 CN.Close();
 
-            testButton_icon.Visibility = Visibility.Visible;
-            testButton_ring.Visibility = Visibility.Collapsed;
-
             return str;
         }
 
@@ -225,9 +230,6 @@ namespace App1
 
             if (CN.State == ConnectionState.Open)
                 CN.Close();
-
-            getContentButton_icon.Visibility = Visibility.Visible;
-            getContentButton_ring.Visibility = Visibility.Collapsed;
 
             return str;
         }
