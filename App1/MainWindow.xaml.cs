@@ -48,6 +48,10 @@ namespace App1
             TrySetSystemBackdrop();
         }
 
+        //
+        // Mica-related functions
+        //
+
         bool TrySetSystemBackdrop()
         {
             if (Microsoft.UI.Composition.SystemBackdrops.MicaController.IsSupported())
@@ -113,12 +117,19 @@ namespace App1
             }
         }
 
+        //
+        // Button click functions
+        //
+
         private async void TestButton_Click(object sender, RoutedEventArgs e)
         {
+            // Enable a ProgressRing on the button (instead of an icon)
             testButton_icon.Visibility = Visibility.Collapsed;
             testButton_ring.Visibility = Visibility.Visible;
+
             string sqlmessage = await TestDBConnection(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
 
+            // Create a ContentDialog with the output
             ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = buttonsGrid.XamlRoot;
             dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
@@ -132,11 +143,13 @@ namespace App1
 
         private async void GetContentButton_Click(object sender, RoutedEventArgs e)
         {
+            // Enable a ProgressRing on the button (instead of an icon)
             getContentButton_icon.Visibility = Visibility.Collapsed;
             getContentButton_ring.Visibility = Visibility.Visible;
 
             string sqlmessage = await GetTableContent(addressTextBox.Text, userTextBox.Text, userTextBox.Text, passwordBox.Password);
 
+            // Create a ContentDialog with the output
             ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = buttonsGrid.XamlRoot;
             dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
@@ -148,7 +161,10 @@ namespace App1
             var result = await dialog.ShowAsync();
         }
 
-        // SQL functions
+        //
+        // SQL internal functions
+        //
+
         private async Task<string> TestDBConnection(string dbServer, string dbName, string userName, string userPass)
         {
             string str = "";
@@ -217,6 +233,7 @@ namespace App1
         }
     }
 
+    // Mica-related class
     class WindowsSystemDispatcherQueueHelper
     {
         [StructLayout(LayoutKind.Sequential)]
